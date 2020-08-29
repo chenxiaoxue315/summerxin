@@ -1,0 +1,41 @@
+判断点是否在线段上：
+给定一点Q(a,b),和线段M的首尾两个端点P1(X1,Y1),P2(X2,Y2),要求判断点Q否在线段M上；
+思想：
+首先想到向量叉积这个问题
+则有：（Q - P1） * （P2 - P1）= 0；
+然后要保障在线段内，而不是在线段延长线上，所以
+则有：要求横纵坐标要在P1P2两点的最小值和最大值之间
+代码：
+#include <iostream>
+#include <cstdio>
+#include<algorithm>
+using namespace std;
+ 
+struct point
+{
+    double x;
+    double y;
+};
+ 
+bool onSegment(point Pi , point Pj , point Q)
+{
+    if((Q.x - Pi.x) * (Pj.y - Pi.y) == (Pj.x - Pi.x) * (Q.y - Pi.y)  //叉乘 
+       //保证Q点坐标在pi,pj之间 
+       && min(Pi.x , Pj.x) <= Q.x && Q.x <= max(Pi.x , Pj.x)    
+       && min(Pi.y , Pj.y) <= Q.y && Q.y <= max(Pi.y , Pj.y))
+        return true;
+    else
+        return false;
+}
+ 
+int main()
+{
+    point p1 , p2 , q;
+    cin >> p1.x >> p1.y;
+    cin >> p2.x >> p2.y;
+    cin >> q.x >> q.y;
+    if(onSegment(p1 , p2 , q))
+        cout << "Q点在线段P1P2内" << endl;
+    else
+        cout << "Q点不在线段P1P2内" << endl;
+}

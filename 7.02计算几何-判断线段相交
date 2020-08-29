@@ -1,0 +1,60 @@
+描述：给定四点构成的两条线，判断两条线是否相交
+假设： AB与CD相交，以AB，CD为对角线做四边形，我们可以得出AC，AD在AB的两侧；CA，CB在CD的两侧，但是这个结论不是判断相交的充要条件，只需要加一个条件就可以成为充要条件，这可以由数学证明
+#include <iostream>
+#include<cstdio>
+using namespace std;
+const int maxn = 105;
+struct point//点的结构体
+{
+    double x,y;
+};
+struct line//向量的结构体
+{
+    point start,end;
+};
+line p[maxn];
+int n;
+
+/* 求出向量AB与向量AC的差积,返回0代表共线 */
+double cross( point s,point e1,point e2 )
+{
+    return (e1.x-s.x)*(e2.y-s.y)-(e1.y-s.y)*(e2.x-s.x);
+}
+/* 判断线段AB与线段CD是否相交，相交返回true */
+
+bool check( point a,point b,point c,point d )//
+{
+    double up1,up2,down1,down2,left1,left2,right1,right2;
+    up1 = max(a.y,b.y);
+    down1 = min(a.y,b.y);
+    left1 = min(a.x,b.x);
+    right1 = max(a.x,b.x);
+ 
+    up2 = max(c.y,d.y);
+    down2 = min(c.y,d.y);
+    left2 = min(c.x,d.x);
+    right2 = max(c.x,d.x);
+ 
+    if( up1>=down2 && down1<=up2 && left1<=right2 && right1 >= left2 && cross(a,b,d)*cross(a,b,c)<=0 && cross(d,c,b)*cross(d,c,a)<=0 )
+        return true;//小于0在两侧而不是在同侧
+    return false;
+ 
+}
+int main()
+{
+    while( scanf("%d",&n) == 1 && n )
+    {
+        for( int i = 1 ; i <= n ; i++ )
+            scanf("%lf %lf %lf %lf",&p[i].start.x,&p[i].start.y,&p[i].end.x,&p[i].end.y);
+        int ans = 0;
+        for( int i = 1 ; i <= n ; i++ )
+            for( int j = i+1 ; j <= n; j++ )
+                if( check(p[i].start,p[i].end,p[j].start,p[j].end) )
+                    ans++;
+        printf("%d\n",ans);
+    }
+    return 0;
+}
+ 
+ 
+ 
